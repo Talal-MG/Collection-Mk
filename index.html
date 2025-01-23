@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collection Mk - Biskra</title>
+    <script src="https://kit.fontawesome.com/2a2f403b5c.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main.css">
+    <script src="main.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Collection Mk</div>
+            <div class="language-switcher">
+                <button onclick="changeLanguage('en')" class="lang-btn">EN</button>
+                <button onclick="changeLanguage('fr')" class="lang-btn">FR</button>
+                <button onclick="changeLanguage('ar')" class="lang-btn">عربي</button>
+            </div>
+            <div class="menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" data-en="Home" data-fr="Accueil" data-ar="الرئيسية">Home</a>
+                <a href="product.html" data-en="Products" data-fr="Produits" data-ar="المنتجات">Products</a>
+                <a href="contact.html" data-en="Contact" data-fr="Contact" data-ar="اتصل بنا">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Updated Modal Structure -->
+    <div id="cardModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-image-section">
+                <img class="modal-image" src="" alt="Details image">
+            </div>
+            <div class="modal-details">
+                <h2 class="modal-title"></h2>
+                <div class="modal-rating"></div>
+                <div class="modal-price"></div>
+                <p class="modal-description"></p>
+                <h3>Amenities</h3>
+                <div class="amenities-list"></div>
+                <a href="" class="modal-cta" target="_blank">View on Maps</a>
+            </div>
+        </div>
+    </div>
+
+    <section class="hero">
+        <div class="hero-slider">
+            <div class="slide" style="background-image: url('/image/hero.jpg')"></div>
+            <div class="slide" style="background-image: url('/image/hero2.jpg')"></div>
+            <div class="slide" style="background-image: url('/image/hero3.jpg')"></div>
+            <div class="slide" style="background-image: url('/image/hero4.jpg')"></div>
+        </div>
+        <div class="hero-content">
+            <h1>Welcome to Collection Mk</h1>
+            <p>Discover your best choice</p>
+        </div>
+    </section>
+
+    <section id="hotels" class="section">
+        <h2 class="section-title">Trophie</h2>
+        <div class="card-grid">
+            <div class="card" data-location="https://www.google.com/maps/place/H%C3%B4tel+Maurice+Laban/@34.8450629,5.6294951,13z/data=!4m13!1m2!2m1!1zSMO0dGVscw!3m9!1s0x12f5091319d8467f:0x441b2d85dc6d18a7!5m2!4m1!1i2!8m2!3d34.8450629!4d5.7057128!15sCgdIw7R0ZWxzkgEFaG90ZWzgAQA!16s%2Fg%2F11j5gtrcj7?authuser=0&entry=ttu&g_ep=EgoyMDI1MDEwOC4wIKXMDSoASAFQAw%3D%3D">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/t1.jpg" alt="Palace Hotel 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/t2.jpg" alt="Palace Hotel 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/t3.jpg" alt="Palace Hotel 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/t4.jpg" alt="Palace Hotel 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>Trophie ......</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price">From 7065 DA/night</div>
+                    <p>Luxury accommodation with modern amenities and traditional charm</p>
+                </div>
+            </div>
+            <div class="card" data-location="https://maps.app.goo.gl/Hs7Hs7Hs7Hs7Hs7H9">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/t5.jpg" alt="Sahara Resort 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/t6.jpg" alt="Sahara Resort 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/t7.jpg" alt="Sahara Resort 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/t8.jpg" alt="Sahara Resort 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>Trophie ......</h3>
+                    <div class="rating">★★★★☆</div>
+                    <div class="price">From 5450 DA/night</div>
+                    <p>Desert-themed resort with stunning views and spa facilities</p>
+                </div>
+            </div>
+            <div class="card" data-location="https://maps.app.goo.gl/newHotelLocation">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/t9.jpg" alt="New Hotel 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/t10.jpg" alt="New Hotel 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/t11.jpg" alt="New Hotel 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/t12.jpg" alt="New Hotel 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>Trophie ......</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price">From 6500 DA/night</div>
+                    <p>Modern luxury hotel with exceptional service and comfort</p>
+                </div>
+            </div>
+        </div>
+        
+    </section>
+
+    <section id="restaurants" class="section">
+        <h2 class="section-title">Robe de remise de diplome</h2>
+        <div class="card-grid">
+            <div class="card" data-location="https://maps.app.goo.gl/Hs7Hs7Hs7Hs7Hs7H10">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/r1.jpg" alt="Le Ziban 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/r2.jpg" alt="Le Ziban 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/r3.jpg" alt="Le Ziban 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/r4.jpg" alt="Le Ziban 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>......</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price">Average 1 000 DA/person</div>
+                    <p>Traditional Algerian cuisine with modern twists</p>
+                </div>
+            </div>
+            <div class="card" data-location="https://maps.app.goo.gl/Hs7Hs7Hs7Hs7Hs7H11">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/r5.jpg" alt="Oasis Cafe 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/r6.jpg" alt="Oasis Cafe 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/r12.jpg" alt="Oasis Cafe 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/r8.jpg" alt="Oasis Cafe 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>......</h3>
+                    <div class="rating">★★★★☆</div>
+                    <div class="price">Average 1 500 DA/person</div>
+                    <p>Mediterranean dishes in a relaxed atmosphere</p>
+                </div>
+            </div>
+            <div class="card" data-location="https://maps.app.goo.gl/newRestaurantLocation">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/r9.jpg" alt="New Restaurant 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/r10.jpg" alt="New Restaurant 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/r11.jpg" alt="New Restaurant 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/r12.jpg" alt="New Restaurant 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>......</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price">Average 2 000 DA/person</div>
+                    <p>Authentic local cuisine with a modern flair</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="hammams" class="section">
+        <h2 class="section-title">Tapis et Coran</h2>
+        <div class="card-grid">
+            <div class="card" data-location="https://maps.app.goo.gl/Hs7Hs7Hs7Hs7Hs7H12">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/c1.jpg" alt="Royal Hammam 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/c2.jpg" alt="Royal Hammam 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/c3.jpg" alt="Royal Hammam 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/c4.jpg" alt="Royal Hammam 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>......</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price">Average 1 000 DA/person</div>
+                    <p>Tourisme thermal . Clinique thermal . Parc aquatique . Station thermal. Centre de traitement thermal</p>
+                </div>
+            </div>
+            <div class="card" data-location="https://maps.app.goo.gl/newHammamLocation">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/c5.jpg" alt="New Hammam 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/c6.jpg" alt="New Hammam 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/c7.jpg" alt="New Hammam 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/c8.jpg" alt="New Hammam 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>......</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price">Average 1 000 DA/person</div>
+                    <p>Traditional hammam experience with modern spa facilities</p>
+                </div>
+            </div>
+            <div class="card" data-location="https://maps.app.goo.gl/newHammamLocation2">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/c9.jpg" alt="Luxury Hammam 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/c10.jpg" alt="Luxury Hammam 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/c11.jpg" alt="Luxury Hammam 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/c12.jpg" alt="Luxury Hammam 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>......</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price">Average 1 000 DA/person</div>
+                    <p>Luxurious thermal spa with premium wellness treatments</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="attractions" class="section">
+        <h2 class="section-title">Impression et publicite</h2>
+        <div class="card-grid">
+            <div class="card" data-location="https://maps.app.goo.gl/Hs7Hs7Hs7Hs7Hs7H13">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/i1.jpg" alt="Sahara Desert 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/i2.jpg" alt="Sahara Desert 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/i3.jpg" alt="Sahara Desert 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/i4.jpg" alt="Sahara Desert 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>......</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price">Average 1 000 DA/person</div>
+                    <p>Guided tours into the majestic Sahara Desert</p>
+                </div>
+            </div>
+            <div class="card" data-location="https://maps.app.goo.gl/Hs7Hs7Hs7Hs7Hs7H13">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/i5.jpg" alt="Sahara Desert 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/i6.jpg" alt="Sahara Desert 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/i7.jpg" alt="Sahara Desert 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/i8.jpg" alt="Sahara Desert 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>......</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price">Average 1 000 DA/person</div>
+                    <p>Guided tours into the majestic Sahara Desert</p>
+                </div>
+            </div>
+            <div class="card" data-location="https://maps.app.goo.gl/Hs7Hs7Hs7Hs7Hs7H13">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/i9.jpg" alt="Sahara Desert 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/i10.jpg" alt="Sahara Desert 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/i11.jpg" alt="Sahara Desert 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/i12.jpg" alt="Sahara Desert 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>......</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price">Average 1 000 DA/person</div>
+                    <p>Guided tours into the majestic Sahara Desert</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="dev-footer">
+        <div class="dev-container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 Mirage Dev Team</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+</body>
+</html>
