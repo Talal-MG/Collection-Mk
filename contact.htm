@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Collection Mk</title>
+    <script src="https://kit.fontawesome.com/2a2f403b5c.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main-cont.css">
+    <script src="main-cont.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="home.html" class="logo">Collection Mk</a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="product.html">Produits</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <section class="contact-section">
+        <h2 class="section-title">Contact Us</h2>
+        
+        <div class="contact-grid">
+            <div class="contact-card">
+                <i class="fas fa-map-marker-alt"></i>
+                <h3>Address</h3>
+                <p>123 Biskra Street<br>Biskra, Algeria</p>
+            </div>
+            
+            <div class="contact-card">
+                <i class="fas fa-phone"></i>
+                <h3>Phone</h3>
+                <a href="tel:+213123456789">+213 123 456 789</a>
+            </div>
+            
+            <div class="contact-card">
+                <i class="fas fa-envelope"></i>
+                <h3>Email</h3>
+                <a href="mailto:contact@collectionmk.com">contact@collectionmk.com</a>
+            </div>
+
+            <div class="contact-card">
+                <i class="fas fa-clock"></i>
+                <h3>Working Hours</h3>
+                <p>Monday - Saturday<br>9:00 AM - 8:00 PM</p>
+            </div>
+
+            <div class="contact-card">
+                <i class="fab fa-instagram"></i>
+                <h3>Instagram</h3>
+                <a href="https://instagram.com/collectionmk" target="_blank">@collectionmk</a>
+            </div>
+
+            <div class="contact-card">
+                <i class="fab fa-facebook"></i>
+                <h3>Facebook</h3>
+                <a href="https://facebook.com/collectionmk" target="_blank">Collection MK</a>
+            </div>
+
+            <div class="contact-card">
+                <i class="fab fa-whatsapp"></i>
+                <h3>WhatsApp</h3>
+                <a href="https://wa.me/213123456789" target="_blank">+213 123 456 789</a>
+            </div>
+        </div>
+
+        <div class="contact-form">
+            <form id="contactForm" onsubmit="return handleSubmit(event)">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" name="subject" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="map-section">
+        <div class="map-container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d103859.5449860333!2d5.673005!3d34.8502!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12f5179a2c19d2d9%3A0x2fec62e1f10b9ff!2sBiskra%2C%20Algeria!5e0!3m2!1sen!2s!4v1650000000000!5m2!1sen!2s" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </section>
+    <footer class="dev-footer">
+        <div class="dev-container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 Mirage Dev Team</p>
+            </div>
+        </div>
+    </footer>
+ 
+</body>
+</html>
