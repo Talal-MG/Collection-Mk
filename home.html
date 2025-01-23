@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collection Mk - Biskra</title>
+    <script src="https://kit.fontawesome.com/2a2f403b5c.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            overflow-x: hidden;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        header {
+            background: transparent;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            transition: 0.3s ease-in-out;
+        }
+
+        header.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(20px, 4vw, 28px);
+            font-weight: 700;
+            color: #fff;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        header.scrolled .logo {
+            color: #333;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: clamp(20px, 3vw, 40px);
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 500;
+            font-size: clamp(14px, 2vw, 16px);
+            transition: 0.3s;
+            position: relative;
+        }
+
+        header.scrolled .nav-links a {
+            color: #333;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #c5a880;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .menu-btn {
+            display: none;
+            cursor: pointer;
+            color: #fff;
+            font-size: clamp(20px, 4vw, 24px);
+        }
+
+        header.scrolled .menu-btn {
+            color: #333;
+        }
+
+        /* Updated Hero Section Styles */
+        .hero {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+        }
+
+        .hero-slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background-attachment: fixed;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(to top, #f8f9fa, transparent);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 90%;
+            width: 800px;
+            padding: 0 20px;
+        }
+
+        .hero-content h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(2.5em, 8vw, 4.5em);
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s forwards 0.5s;
+        }
+
+        .hero-content p {
+            font-size: clamp(1.2em, 3vw, 1.5em);
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s forwards 0.8s;
+        }
+
+        /* Section Styles */
+        .section {
+            padding: clamp(40px, 8vw, 100px) 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            font-size: clamp(2em, 5vw, 3em);
+            margin-bottom: clamp(30px, 5vw, 60px);
+            color: #333;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: clamp(40px, 5vw, 60px);
+            height: 3px;
+            background: #c5a880;
+        }
+
+        /* Card Grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
+            gap: clamp(20px, 4vw, 40px);
+            padding: clamp(10px, 2vw, 20px);
+            width: 100%;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-decoration: none;
+            transition: 0.3s;
+            opacity: 0;
+            transform: translateY(30px);
+            width: 100%;
+        }
+
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .swiper {
+            width: 100%;
+            height: clamp(200px, 30vw, 250px);
+        }
+
+        .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: clamp(20px, 4vw, 30px);
+        }
+
+        .card-content h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(1.4em, 3vw, 1.8em);
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .rating {
+            color: #ffd700;
+            margin: 10px 0;
+            font-size: clamp(14px, 2vw, 16px);
+        }
+
+        .price {
+            font-size: clamp(1.2em, 2.5vw, 1.4em);
+            color: #c5a880;
+            font-weight: 600;
+            margin: 15px 0;
+        }
+
+        .card-content p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: clamp(14px, 2vw, 16px);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+            padding: clamp(10px, 3vw, 30px);
+        }
+
+        .modal-content {
+            position: relative;
+            background: linear-gradient(145deg, #ffffff, #f5f5f5);
+            margin: 5% auto;
+            padding: clamp(20px, 4vw, 30px);
+            width: min(90%, 1000px);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            animation: modalFadeIn 0.4s ease-out;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+            gap: clamp(20px, 4vw, 30px);
+        }
+
+        .modal-image-section {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            height: clamp(250px, 40vw, 400px);
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+            transition: transform 0.3s;
+        }
+
+        .modal-image:hover {
+            transform: scale(1.05);
+        }
+
+        .modal-details {
+            padding: clamp(15px, 3vw, 20px);
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: clamp(20px, 4vw, 24px);
+            cursor: pointer;
+            color: #333;
+            background: white;
+            width: clamp(30px, 5vw, 40px);
+            height: clamp(30px, 5vw, 40px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            z-index: 2001;
+        }
+
+        .close-modal:hover {
+            background: #f0f0f0;
+            transform: rotate(90deg);
+        }
+
+        .modal-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(1.8em, 4vw, 2.5em);
+            color: #333;
+            margin-bottom: clamp(15px, 3vw, 20px);
+            font-weight: 600;
+        }
+
+        .modal-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: clamp(20px, 4vw, 25px);
+            font-size: clamp(1em, 2vw, 1.1em);
+        }
+
+        .amenities-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+            gap: clamp(10px, 2vw, 15px);
+            margin: clamp(15px, 3vw, 20px) 0;
+        }
+
+        .amenity-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #555;
+            font-size: clamp(14px, 2vw, 16px);
+        }
+
+        .amenity-item i {
+            color: #c5a880;
+            font-size: clamp(16px, 2.5vw, 18px);
+        }
+
+        .modal-price {
+            font-size: clamp(1.5em, 3vw, 1.8em);
+            color: #c5a880;
+            font-weight: bold;
+            margin: clamp(15px, 3vw, 20px) 0;
+        }
+
+        .modal-cta {
+            background: linear-gradient(45deg, #c5a880, #a88d69);
+            color: white;
+            padding: clamp(12px, 2.5vw, 15px) clamp(20px, 4vw, 30px);
+            border: none;
+            border-radius: 30px;
+            font-size: clamp(1em, 2vw, 1.1em);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+            width: 100%;
+            margin-top: clamp(15px, 3vw, 20px);
+        }
+
+        .modal-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(197, 168, 128, 0.4);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .menu-btn {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: #fff;
+                padding: 20px;
+                flex-direction: column;
+                text-align: center;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links a {
+                color: #333;
+                padding: 10px 0;
+            }
+
+            .modal-content {
+                grid-template-columns: 1fr;
+                margin: 2% auto;
+            }
+
+            .modal-image-section {
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 2.5em;
+            }
+
+            .hero-content p {
+                font-size: 1.2em;
+            }
+
+            .section {
+                padding: 40px 15px;
+            }
+
+            .card-grid {
+                gap: 20px;
+                padding: 10px;
+            }
+
+            .modal-content {
+                padding: 15px;
+            }
+
+            .modal-title {
+                font-size: 1.8em;
+            }
+
+            .amenities-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .language-switcher {
+            display: flex;
+            gap: 5px;
+            margin-right: 20px;
+        }
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        header.scrolled .lang-btn {
+            background: rgba(0, 0, 0, 0.05);
+            color: #333;
+        }
+
+        header.scrolled .lang-btn:hover {
+            background: rgba(197, 168, 128, 0.15);
+            color: #c5a880;
+        }
+
+        @media (max-width: 768px) {
+            .language-switcher {
+                margin: 0;
+                position: absolute;
+                top: 20px;
+                right: 60px;
+            }
+        }
+
+        /* RTL Support */
+        [dir="rtl"] {
+            text-align: right;
+        }
+
+        [dir="rtl"] .nav-links {
+            flex-direction: row-reverse;
+        }
+
+        [dir="rtl"] .card-content {
+            text-align: right;
+        }
+
+        [dir="rtl"] .modal-content {
+            text-align: right;
+        }
+
+        /* Add Arabic font styles */
+        [dir="rtl"] * {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        [dir="rtl"] .logo {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        [dir="rtl"] .section-title {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        [dir="rtl"] .card-content h3 {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        [dir="rtl"] .modal-title {
+            font-family: 'Cairo', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Collection Mk</div>
+            <div class="language-switcher">
+                <button onclick="changeLanguage('en')" class="lang-btn">EN</button>
+                <button onclick="changeLanguage('fr')" class="lang-btn">FR</button>
+                <button onclick="changeLanguage('ar')" class="lang-btn">عربي</button>
+            </div>
+            <div class="menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="nav-links">
+                <a href="home.html" data-en="Home" data-fr="Accueil" data-ar="الرئيسية">Home</a>
+                <a href="product.html" data-en="Products" data-fr="Produits" data-ar="المنتجات">Products</a>
+                <a href="contact.html" data-en="Contact" data-fr="Contact" data-ar="اتصل بنا">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Updated Modal Structure -->
+    <div id="cardModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-image-section">
+                <img class="modal-image" src="" alt="Details image">
+            </div>
+            <div class="modal-details">
+                <h2 class="modal-title"></h2>
+                <div class="modal-rating"></div>
+                <div class="modal-price"></div>
+                <p class="modal-description"></p>
+                <h3>Amenities</h3>
+                <div class="amenities-list"></div>
+                <a href="" class="modal-cta" target="_blank">View on Maps</a>
+            </div>
+        </div>
+    </div>
+
+    <section class="hero">
+        <div class="hero-slider">
+            <div class="slide" style="background-image: url('/image/hero.jpg')"></div>
+            <div class="slide" style="background-image: url('/image/hero2.jpg')"></div>
+            <div class="slide" style="background-image: url('/image/hero3.jpg')"></div>
+            <div class="slide" style="background-image: url('/image/hero4.jpg')"></div>
+        </div>
+        <div class="hero-content">
+            <h1>Welcome to Collection Mk</h1>
+            <p>Discover your best choice</p>
+        </div>
+    </section>
+
+    <section id="hotels" class="section">
+        <h2 class="section-title">Trophie</h2>
+        <div class="card-grid">
+            <div class="card" data-location="https://www.google.com/maps/place/H%C3%B4tel+Maurice+Laban/@34.8450629,5.6294951,13z/data=!4m13!1m2!2m1!1zSMO0dGVscw!3m9!1s0x12f5091319d8467f:0x441b2d85dc6d18a7!5m2!4m1!1i2!8m2!3d34.8450629!4d5.7057128!15sCgdIw7R0ZWxzkgEFaG90ZWzgAQA!16s%2Fg%2F11j5gtrcj7?authuser=0&entry=ttu&g_ep=EgoyMDI1MDEwOC4wIKXMDSoASAFQAw%3D%3D">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/t1.jpg" alt="Palace Hotel 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/t2.jpg" alt="Palace Hotel 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/t3.jpg" alt="Palace Hotel 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/t4.jpg" alt="Palace Hotel 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>Trophie ......</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price">From 7065 DA/night</div>
+                    <p>Luxury accommodation with modern amenities and traditional charm</p>
+                </div>
+            </div>
+            <div class="card" data-location="https://maps.app.goo.gl/Hs7Hs7Hs7Hs7Hs7H9">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/t5.jpg" alt="Sahara Resort 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/t6.jpg" alt="Sahara Resort 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/t7.jpg" alt="Sahara Resort 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/t8.jpg" alt="Sahara Resort 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>Trophie ......</h3>
+                    <div class="rating">★★★★☆</div>
+                    <div class="price">From 5450 DA/night</div>
+                    <p>Desert-themed resort with stunning views and spa facilities</p>
+                </div>
+            </div>
+            <div class="card" data-location="https://maps.app.goo.gl/newHotelLocation">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/t9.jpg" alt="New Hotel 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/t10.jpg" alt="New Hotel 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/t11.jpg" alt="New Hotel 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/t12.jpg" alt="New Hotel 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>Trophie ......</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price">From 6500 DA/night</div>
+                    <p>Modern luxury hotel with exceptional service and comfort</p>
+                </div>
+            </div>
+        </div>
+        
+    </section>
+
+    <section id="restaurants" class="section">
+        <h2 class="section-title">Robe de remise de diplome</h2>
+        <div class="card-grid">
+            <div class="card" data-location="https://maps.app.goo.gl/Hs7Hs7Hs7Hs7Hs7H10">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/r1.jpg" alt="Le Ziban 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/r2.jpg" alt="Le Ziban 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/r3.jpg" alt="Le Ziban 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/r4.jpg" alt="Le Ziban 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>......</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price">Average 1 000 DA/person</div>
+                    <p>Traditional Algerian cuisine with modern twists</p>
+                </div>
+            </div>
+            <div class="card" data-location="https://maps.app.goo.gl/Hs7Hs7Hs7Hs7Hs7H11">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/r5.jpg" alt="Oasis Cafe 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/r6.jpg" alt="Oasis Cafe 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/r12.jpg" alt="Oasis Cafe 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/r8.jpg" alt="Oasis Cafe 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>......</h3>
+                    <div class="rating">★★★★☆</div>
+                    <div class="price">Average 1 500 DA/person</div>
+                    <p>Mediterranean dishes in a relaxed atmosphere</p>
+                </div>
+            </div>
+            <div class="card" data-location="https://maps.app.goo.gl/newRestaurantLocation">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/r9.jpg" alt="New Restaurant 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/r10.jpg" alt="New Restaurant 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/r11.jpg" alt="New Restaurant 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/r12.jpg" alt="New Restaurant 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>......</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price">Average 2 000 DA/person</div>
+                    <p>Authentic local cuisine with a modern flair</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="hammams" class="section">
+        <h2 class="section-title">Tapis et Coran</h2>
+        <div class="card-grid">
+            <div class="card" data-location="https://maps.app.goo.gl/Hs7Hs7Hs7Hs7Hs7H12">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/c1.jpg" alt="Royal Hammam 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/c2.jpg" alt="Royal Hammam 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/c3.jpg" alt="Royal Hammam 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/c4.jpg" alt="Royal Hammam 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>......</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price">Average 1 000 DA/person</div>
+                    <p>Tourisme thermal . Clinique thermal . Parc aquatique . Station thermal. Centre de traitement thermal</p>
+                </div>
+            </div>
+            <div class="card" data-location="https://maps.app.goo.gl/newHammamLocation">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/c5.jpg" alt="New Hammam 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/c6.jpg" alt="New Hammam 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/c7.jpg" alt="New Hammam 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/c8.jpg" alt="New Hammam 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>......</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price">Average 1 000 DA/person</div>
+                    <p>Traditional hammam experience with modern spa facilities</p>
+                </div>
+            </div>
+            <div class="card" data-location="https://maps.app.goo.gl/newHammamLocation2">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/c9.jpg" alt="Luxury Hammam 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/c10.jpg" alt="Luxury Hammam 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/c11.jpg" alt="Luxury Hammam 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/c12.jpg" alt="Luxury Hammam 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>......</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price">Average 1 000 DA/person</div>
+                    <p>Luxurious thermal spa with premium wellness treatments</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="attractions" class="section">
+        <h2 class="section-title">Impression et publicite</h2>
+        <div class="card-grid">
+            <div class="card" data-location="https://maps.app.goo.gl/Hs7Hs7Hs7Hs7Hs7H13">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/i1.jpg" alt="Sahara Desert 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/i2.jpg" alt="Sahara Desert 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/i3.jpg" alt="Sahara Desert 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/i4.jpg" alt="Sahara Desert 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>......</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price">Average 1 000 DA/person</div>
+                    <p>Guided tours into the majestic Sahara Desert</p>
+                </div>
+            </div>
+            <div class="card" data-location="https://maps.app.goo.gl/Hs7Hs7Hs7Hs7Hs7H13">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/i5.jpg" alt="Sahara Desert 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/i6.jpg" alt="Sahara Desert 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/i7.jpg" alt="Sahara Desert 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/i8.jpg" alt="Sahara Desert 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>......</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price">Average 1 000 DA/person</div>
+                    <p>Guided tours into the majestic Sahara Desert</p>
+                </div>
+            </div>
+            <div class="card" data-location="https://maps.app.goo.gl/Hs7Hs7Hs7Hs7Hs7H13">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/image/i9.jpg" alt="Sahara Desert 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/i10.jpg" alt="Sahara Desert 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/i11.jpg" alt="Sahara Desert 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/image/i12.jpg" alt="Sahara Desert 4">
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="card-content">
+                    <h3>......</h3>
+                    <div class="rating">★★★★★</div>
+                    <div class="price">Average 1 000 DA/person</div>
+                    <p>Guided tours into the majestic Sahara Desert</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        // Initialize Swiper for all cards
+        document.querySelectorAll('.swiper').forEach(element => {
+            new Swiper(element, {
+                loop: true,
+                autoplay: {
+                    delay: 3000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+            });
+        });
+
+        // Enhanced smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        const menuBtn = document.querySelector('.menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Enhanced card animations with Intersection Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        document.querySelectorAll('.card').forEach((card) => {
+            observer.observe(card);
+        });
+
+        // Modal functionality
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', () => {
+                const cardContent = card.querySelector('.card-content');
+                const firstImage = card.querySelector('.swiper-slide img');
+                const modal = document.getElementById('cardModal');
+                const locationUrl = card.getAttribute('data-location');
+                
+                // Set modal content
+                modal.querySelector('.modal-image').src = firstImage.src;
+                modal.querySelector('.modal-title').textContent = cardContent.querySelector('h3').textContent;
+                
+                // Set rating if it exists
+                const cardRating = cardContent.querySelector('.rating');
+                const modalRating = modal.querySelector('.modal-rating');
+                if (cardRating) {
+                    modalRating.textContent = cardRating.textContent;
+                    modalRating.style.display = 'block';
+                } else {
+                    modalRating.style.display = 'none';
+                }
+
+                // Set price if it exists
+                const cardPrice = cardContent.querySelector('.price');
+                const modalPrice = modal.querySelector('.modal-price');
+                if (cardPrice) {
+                    modalPrice.textContent = cardPrice.textContent;
+                    modalPrice.style.display = 'block';
+                } else {
+                    modalPrice.style.display = 'none';
+                }
+
+                // Set description
+                modal.querySelector('.modal-description').textContent = cardContent.querySelector('p').textContent;
+
+                // Set location URL for the CTA button
+                modal.querySelector('.modal-cta').href = locationUrl;
+
+                // Set amenities based on card type
+                const amenitiesList = modal.querySelector('.amenities-list');
+                const cardTitle = cardContent.querySelector('h3').textContent.toLowerCase();
+                
+                let amenities = [];
+                
+                if (cardTitle.includes('trophie')) {
+                    amenities = [
+                        {icon: "fas fa-star", text: "Premium Quality"},
+                        {icon: "fas fa-medal", text: "Award Winning"},
+                        {icon: "fas fa-headset", text: "24/7 Support"},
+                        {icon: "fas fa-box", text: "Gift Packaging"},
+                        {icon: "fas fa-exchange-alt", text: "Easy Returns"},
+                        {icon: "fas fa-truck", text: "Fast Delivery"}
+                    ];
+                } else if (cardTitle.includes('dress')) {
+                    amenities = [
+                        {icon: "fas fa-ruler", text: "Custom Sizing"},
+                        {icon: "fas fa-tshirt", text: "Premium Fabric"},
+                        {icon: "fas fa-hands", text: "Handmade Details"},
+                        {icon: "fas fa-paint-brush", text: "Custom Design"},
+                        {icon: "fas fa-headset", text: "24/7 Support"},
+                        {icon: "fas fa-clock", text: "Quick Alterations"},
+                        {icon: "fas fa-shield-alt", text: "Quality Guarantee"}
+                    ];
+                } else if (cardTitle.includes('accessories')) {
+                    amenities = [
+                        {icon: "fas fa-gem", text: "Genuine Materials"},
+                        {icon: "fas fa-box-heart", text: "Luxury Packaging"},
+                        {icon: "fas fa-certificate", text: "Authenticity Card"},
+                        {icon: "fas fa-headset", text: "24/7 Support"},
+                        {icon: "fas fa-sync", text: "Lifetime Warranty"},
+                        {icon: "fas fa-shield-check", text: "Quality Tested"},
+                        {icon: "fas fa-sparkles", text: "Unique Designs"}
+                    ];
+                } else {
+                    amenities = [
+                        {icon: "fas fa-star", text: "Premium Quality"},
+                        {icon: "fas fa-box", text: "Secure Packaging"},
+                        {icon: "fas fa-truck", text: "Fast Shipping"},
+                        {icon: "fas fa-undo", text: "Easy Returns"},
+                        {icon: "fas fa-headset", text: "24/7 Support"},
+                        {icon: "fas fa-shield-alt", text: "Warranty"}
+                    ];
+                }
+
+                amenitiesList.innerHTML = amenities
+                    .map(amenity => `
+                        <div class="amenity-item">
+                            <i class="${amenity.icon}"></i>
+                            <span>${amenity.text}</span>
+                        </div>
+                    `).join('');
+
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        // Close modal functionality
+        document.querySelector('.close-modal').addEventListener('click', () => {
+            document.getElementById('cardModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+
+        window.addEventListener('click', (event) => {
+            const modal = document.getElementById('cardModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Language translations
+        const translations = {
+            en: {
+                welcome: "Welcome to Collection Mk",
+                discover: "Discover your best choice",
+                trophie: "Trophie",
+                graduation: "Robe de remise de diplome",
+                carpets: "Tapis et Coran",
+                printing: "Impression et publicite",
+                // Add more translations as needed
+            },
+            fr: {
+                welcome: "Bienvenue à Collection Mk",
+                discover: "Découvrez votre meilleur choix",
+                trophie: "Trophée",
+                graduation: "Robe de remise de diplôme",
+                carpets: "Tapis et Coran",
+                printing: "Impression et publicité",
+                // Add more translations as needed
+            },
+            ar: {
+                welcome: "مرحباً بكم في Collection Mk",
+                discover: "اكتشف أفضل اختيار لك",
+                trophie: "كؤوس",
+                graduation: "روب التخرج",
+                carpets: "سجاد وقرآن",
+                printing: "طباعة وإعلان",
+                // Add more translations as needed
+            }
+        };
+
+        function changeLanguage(lang) {
+            // Set text direction
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            
+            // Update navigation links
+            document.querySelectorAll('[data-' + lang + ']').forEach(element => {
+                element.textContent = element.getAttribute('data-' + lang);
+            });
+
+            // Update main content
+            document.querySelector('.hero-content h1').textContent = translations[lang].welcome;
+            document.querySelector('.hero-content p').textContent = translations[lang].discover;
+            
+            // Update section titles
+            const sectionTitles = document.querySelectorAll('.section-title');
+            sectionTitles[0].textContent = translations[lang].trophie;
+            sectionTitles[1].textContent = translations[lang].graduation;
+            sectionTitles[2].textContent = translations[lang].carpets;
+            sectionTitles[3].textContent = translations[lang].printing;
+
+            // Store the selected language preference
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        // Load preferred language on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
+            changeLanguage(preferredLanguage);
+        });
+
+        // Hero Slider functionality
+        function initHeroSlider() {
+            const slides = document.querySelectorAll('.hero-slider .slide');
+            let currentSlide = 0;
+            
+            // Show first slide
+            slides[0].classList.add('active');
+            
+            function nextSlide() {
+                slides[currentSlide].classList.remove('active');
+                currentSlide = (currentSlide + 1) % slides.length;
+                slides[currentSlide].classList.add('active');
+            }
+            
+            // Change slide every 5 seconds
+            setInterval(nextSlide, 5000);
+        }
+
+        // Initialize hero slider when page loads
+        document.addEventListener('DOMContentLoaded', initHeroSlider);
+    </script>
+</body>
+</html>
